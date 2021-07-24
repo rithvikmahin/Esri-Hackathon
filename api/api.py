@@ -16,7 +16,15 @@ tracks = sp.playlist_tracks(url, limit=1)
 artist = tracks["items"][0]["track"]["artists"][0]["name"]
 artist_id = tracks["items"][0]["track"]["artists"][0]["id"]
 related_artists = sp.artist_related_artists(artist_id)
-print(related_artists["artists"])
+
+x = 1
+for i in related_artists["artists"]:
+    if x < 3:
+        print(x)
+        print(i)
+        x += 1
+
+
 
 musicbrainzngs.set_useragent("test", "1")
 query = musicbrainzngs.search_artists(query="Taylor Swift")
