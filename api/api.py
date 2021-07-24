@@ -68,7 +68,7 @@ def get_query_from_react():
     existingCountries = []
     # parse dict to get country information
     for artist in Dict.keys():
-        tempPlace = Dic[artist]["country/area"]
+        tempPlace = Dict[artist]["country/area"]
         if tempPlace not in existingCountries:
             existingCountries.append(tempPlace)  
 
@@ -78,7 +78,7 @@ def get_query_from_react():
     ## Getting recommandation 
     recommendSingers = {}
     #for each artist
-    for artist in Dic.keys():
+    for artist in Dict.keys():
         # check if we need to break
         if(len(recommendSingers) > 3):
             break
