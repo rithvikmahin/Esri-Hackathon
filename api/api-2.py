@@ -67,6 +67,7 @@ print(Dict)
 #     print(eachArtist)
 
 quit()
+return Dict
 ############################################
 
 

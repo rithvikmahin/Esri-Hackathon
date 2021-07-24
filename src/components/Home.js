@@ -18,14 +18,22 @@ export function Home() {
 
     const handleQuery = (query) => {
         let myParams = {
+            headers: {
+                'Content-Type': 'application/json'
+            },
             data: query
         }
 
-        axios.post('http://127.0.0.1:5000/api', myParams).then((response) => {
-            console.log(response);
-
+        const api = axios.create({
+            baseURL: "http://127.0.0.1:5000/api",
+            timeout: 10 * 60 * 1000
+        });
+        
+        api.post('http://127.0.0.1:5000/api', myParams).then((response) => {
+            console.log("Response, ", response.data);
+            sessionStorage.setItem("data", JSON.stringify(response));
         }).catch((error) => {
-            console.log(error);
+            console.log("Error, ", error);
         });
     }
 
@@ -48,6 +56,7 @@ export function Home() {
     );  
 }
 
+
 function Button() {
-  return <a href="map.html">Redirect to Html page</a>
+  return <button><a href="map.html">Redirect to Html page</a></button>
 }
