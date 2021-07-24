@@ -54,7 +54,8 @@ for song in tracks["items"]:
         else:
             # artistList[artist["name"]] += 1
             Dict[artist["name"]]["count"] +=1
-
+            
+# all artists' info is stored in Dict
 print(Dict)
 
 # print(artistCountries)
