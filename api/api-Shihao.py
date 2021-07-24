@@ -14,10 +14,13 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 url = "https://open.spotify.com/playlist/6Oo1h6XVJSh3TKATxgUkF7?si=ecf2f522e75844e9"
 
 tracks = sp.playlist_tracks(url, limit=30)
-
+musicbrainzngs.set_useragent("test","1")
+# print(musicbrainzngs.search_artists(query="van morrison")["artist-list"][0]["area"]["name"])
+# quit()
 # a dictionary {"name of artist" : "times appear in the playlist"}
 artistList = {}
 artistIDs = {}
+artistCountries = {}
 for song in tracks["items"]:
     
     #artists = tracks["items"][0]["track"]["artists"]
@@ -28,8 +31,21 @@ for song in tracks["items"]:
             # create artist and start counting as 1
             artistList[artist["name"]] = 1
             artistIDs[artist["name"]] = artist["id"]
+            
+            # get the country info of artist
+            queryBranch = musicbrainzngs.search_artists(query=artist["name"])
+            if "country" in queryBranch["artist-list"][0].keys():
+                artistCountries[artist["name"]] = queryBranch["artist-list"][0]["country"]
+            elif "area" in queryBranch["artist-list"][0].keys():
+                artistCountries[artist["name"]] = queryBranch["artist-list"][0]["area"]["name"]
+            else:
+                print("\n\n---\n" + queryBranch["artist-list"][0])
+                print(queryBranch["artist-list"][0])
+
         else:
             artistList[artist["name"]] += 1    
+print(artistCountries)
+quit()
 
 print(artistList)
 
@@ -39,11 +55,18 @@ print(artistIDs)
 
 print("\nNumber of unique artists: "  + str(len(artistList)))
 
-artistsCountry = {}
-
+print("\n---------------------------\n")
+print(artistCountries)
+# artistsCountry = artistIDs
+# for eachArtist in artists:
+#     print(eachArtist)
 
 quit()
 ############################################
+
+
+
+
 
 ### old script
 # artist_id = tracks["items"][0]["track"]["artists"][0]["id"]
@@ -56,7 +79,6 @@ musicbrainzngs.set_useragent("test", "1")
 query = musicbrainzngs.search_artists(query=artist)
 country = query["artist-list"][0]["country"]
 print("Artists in your playlist: \n\t\t" + artist,",",country)
-
 
 
 #get related artists' name
