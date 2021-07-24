@@ -68,8 +68,6 @@ def get_query_from_react():
     print("Dict, ", Dict)
 
     existingCountries = []
-    recommendSingers = {}
-
     # parse dict to get country information
     for artist in Dict.keys():
         tempPlace = Dic[artist]["country/area"]
@@ -79,6 +77,8 @@ def get_query_from_react():
     print(existingCountries)
     print("\n----------")
 
+    ## Getting recommandation 
+    recommendSingers = {}
     #for each artist
     for artist in Dic.keys():
         # check if we need to break
@@ -103,7 +103,7 @@ def get_query_from_react():
                 break
         
             if place != '' and place not in existingCountries:
-                if len(place) < 4 and place != "CA":
+                if len(place) < 4:
                     if related_artist["name"] not in recommendSingers:
                         print("New country: " + place + "\ninfo: ")
                         print(related_artist["name"])
