@@ -37,18 +37,12 @@ def get_query_from_react():
 
         for artist in artists:
             if artist["name"] not in artistList:
-                # create artist and start counting as 1
-                # artistList[artist["name"]] = 1
                 # get the country info of artist
                 queryBranch = musicbrainzngs.search_artists(query=artist["name"])
                 if "country" in queryBranch["artist-list"][0].keys():
-                    # artistCountries[artist["name"]] = queryBranch["artist-list"][0]["country"]
-
                     newArtist = {"id":artist["id"], "country/area":queryBranch["artist-list"][0]["country"],"count":1}
 
                 elif "area" in queryBranch["artist-list"][0].keys():
-                    # artistCountries[artist["name"]] = queryBranch["artist-list"][0]["area"]["name"]
-
                     newArtist = {"id":artist["id"], "country/area":queryBranch["artist-list"][0]["area"]["name"],"count":1}
 
                 else:
@@ -75,7 +69,7 @@ def get_query_from_react():
     print(existingCountries)
     print("\n----------")
 
-    ## Getting recommandation 
+    ## Get recommandation 
     recommendSingers = {}
     #for each artist
     for artist in Dict.keys():
@@ -108,8 +102,38 @@ def get_query_from_react():
                         recommendSingers[related_artist["name"]] = place
             if(len(recommendSingers) > 3):
                 break   
+    
+    recommend = {}
+    recommend["RecommendArtists"] = recommendSingers
 
-    return recommendSingers
+    result = {}
+    result["ArtistsInPlaylist"] = Dict
+
+    ## Combine the artist in the playlist and the recommendation
+    result.update(recommend)
+
+    ##############
+    ## A sample of return value:
+    ## result = 
+    # {'ArtistsInPlaylist': 
+    #     {'Steely Dan': 
+    #         {'id': '6P7H3ai06vU1sGvdpBwDmE', 'country/area': 'US', 'count': 1}, 
+    #     'Van Morrison': 
+    #         {'id': '44NX2ffIYHr6D4n7RaZF7A', 'country/area': 'Northern Ireland', 'count': 6}, 
+    #     'Bob Dylan': 
+    #         {'id': '74ASZWbe4lXaubB36ztrGX', 'country/area': 'US', 'count': 14}, 
+    #     'Dire Straits': 
+    #         {'id': '0WwSkZ7LtFUFjGjMZBMt6T', 'country/area': 'GB', 'count': 2}
+    #     }, 
+    # 'RecommendArtists': 
+    #     { 'Little River Band': 'AU', 
+    #       'The Boomtown Rats': 'IE', 
+    #       'Crowded House': 'AU', 
+    #       'INXS': 'AU'
+    #     }
+    # }
+    ######################
+    return result
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000)
