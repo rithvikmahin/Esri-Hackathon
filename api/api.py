@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 # This script takes a PUBLIC spotify playlist and returns the list of related artists
 import spotipy
@@ -24,7 +24,7 @@ def get_query_from_react():
     data = request.get_json()
     url = data["data"]
     tracks = sp.playlist_tracks(url, limit=50)
-    musicbrainzngs.set_useragent("test","1")
+    musicbrainzngs.set_useragent("userAgent","1.0")
 
     # a dictionary {"name of artist" : "times appear in the playlist"}
     artistList = {}
@@ -63,7 +63,7 @@ def get_query_from_react():
                 
     # all artists' info is stored in Dict
     print("Here2")
-    print("Dict, ", Dict)
+    #print("Dict, ", Dict)
 
     existingCountries = []
     # parse dict to get country information
@@ -85,7 +85,7 @@ def get_query_from_react():
 
     # Related artists from Spotify
         related_artists = sp.artist_related_artists(Dict[artist]["id"])
-        ## for each related artist
+        ## for each
         for related_artist in related_artists["artists"]:
             #print(related_artist)
 
@@ -109,7 +109,6 @@ def get_query_from_react():
             if(len(recommendSingers) > 3):
                 break   
 
-    quit()
     return recommendSingers
 
 if __name__ == '__main__':
