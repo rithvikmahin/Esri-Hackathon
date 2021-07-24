@@ -3,13 +3,29 @@ import Search from "./Search";
 import { Image } from "react-bootstrap";
 import "./Home.css";
 import { React, useState } from "react";
+import axios from "axios";
 
 export function Home() {
 
     const [input, setInput] = useState("");
     
     const updateInput  = (input) => {
+        if (input.includes("open.spotify.com/playlist/")) {
+            handleQuery(input);
+        }
         setInput(input);
+    }
+
+    const handleQuery = (query) => {
+        let myParams = {
+            data: query
+        }
+
+        axios.get('http://0.0.0.0:5000/api', myParams).then((response) => {
+            console.log(response);
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
     return (
