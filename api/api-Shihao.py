@@ -9,18 +9,55 @@ client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secr
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 # public spotify playlist link 
-url = "https://open.spotify.com/playlist/37i9dQZF1DWSBcxmKiZ0B8"
-tracks = sp.playlist_tracks(url, limit=1)
+# from a chinese friend: "https://open.spotify.com/playlist/37i9dQZF1DWSBcxmKiZ0B8"
+# from charlie
+url = "https://open.spotify.com/playlist/6Oo1h6XVJSh3TKATxgUkF7?si=ecf2f522e75844e9"
 
-artist = tracks["items"][0]["track"]["artists"][0]["name"]
-artist_id = tracks["items"][0]["track"]["artists"][0]["id"]
-related_artists = sp.artist_related_artists(artist_id)
+tracks = sp.playlist_tracks(url, limit=30)
+
+# a dictionary {"name of artist" : "times appear in the playlist"}
+artistList = {}
+artistIDs = {}
+for song in tracks["items"]:
+    
+    #artists = tracks["items"][0]["track"]["artists"]
+    artists = song["track"]["artists"]
+
+    for artist in artists:
+        if artist["name"] not in artistList:
+            # create artist and start counting as 1
+            artistList[artist["name"]] = 1
+            artistIDs[artist["name"]] = artist["id"]
+        else:
+            artistList[artist["name"]] += 1    
+
+print(artistList)
+
+print("\n---------------------------\n")
+
+print(artistIDs)
+
+print("\nNumber of unique artists: "  + str(len(artistList)))
+
+artistsCountry = {}
+
+
+quit()
+############################################
+
+### old script
+# artist_id = tracks["items"][0]["track"]["artists"][0]["id"]
+# related_artists = sp.artist_related_artists(artist_id)
+### end old script
+
 
 # get the name and country/area of artist(s) from your playlist
 musicbrainzngs.set_useragent("test", "1")
 query = musicbrainzngs.search_artists(query=artist)
 country = query["artist-list"][0]["country"]
 print("Artists in your playlist: \n\t\t" + artist,",",country)
+
+
 
 #get related artists' name
 x = 1
@@ -40,3 +77,7 @@ for i in related_artists["artists"]:
         break
 
 
+# symbology later on
+# county in red -- favorite srtists
+# county in dark 
+# full story pitch
