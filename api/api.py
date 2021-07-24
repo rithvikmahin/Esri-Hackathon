@@ -27,8 +27,7 @@ def get_query_from_react():
     musicbrainzngs.set_useragent("test","1")
 
     # a dictionary {"name of artist" : "times appear in the playlist"}
-    # artistList = {}
-    # artistIDs = {}
+    artistList = {}
     # artistCountries = {}
 
     Dict = {}
@@ -40,7 +39,6 @@ def get_query_from_react():
             if artist["name"] not in artistList:
                 # create artist and start counting as 1
                 # artistList[artist["name"]] = 1
-                # artistIDs[artist["name"]] = artist["id"]
                 # get the country info of artist
                 queryBranch = musicbrainzngs.search_artists(query=artist["name"])
                 if "country" in queryBranch["artist-list"][0].keys():
