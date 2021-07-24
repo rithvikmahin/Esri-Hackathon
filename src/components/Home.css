@@ -1,0 +1,46 @@
+@font-face {
+    font-family: 'Avenir Next LT Pro';
+    src: url(./AvenirNextLTPro-Regular.ttf) format('truetype');
+}
+
+.rowA {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 5%;
+}
+
+.rowB {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 5%;
+    align-self: center;
+    color: #ffffff;
+    font-family: "Avenir Next LT Pro";   
+}
+
+.Image-Container {
+    display: flex;
+}
+
+.GeoTune {
+    align-self: center;
+    font-style: italic;
+    color: #ffffff;
+    font-family: "Avenir Next LT Pro";
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    font-style: italic;
+    font-family: "Avenir Next LT Pro";
+  }
+  ::-moz-placeholder { /* Firefox 19+ */
+    font-family: "Avenir Next LT Pro";
+  }
+  :-ms-input-placeholder { /* IE 10+ */
+    font-family: "Avenir Next LT Pro";
+  }
+  :-moz-placeholder { /* Firefox 18- */
+    font-family: "Avenir Next LT Pro";
+  }
