@@ -84,8 +84,8 @@ def get_query_from_react():
             break
 
     # Related artists from Spotify
-        related_artists = sp.artist_related_artists(Dic[artist]["id"])
-        ## for each
+        related_artists = sp.artist_related_artists(Dict[artist]["id"])
+        ## for each related artist
         for related_artist in related_artists["artists"]:
             #print(related_artist)
 
