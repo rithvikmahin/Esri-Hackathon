@@ -14,6 +14,7 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 musicbrainzngs.set_useragent("test","1")
 
 #data sample
+#dict = { artist1: {id: xx, country: 'xx', count"}}
 Dic = {'Steely Dan': 
             {'id': '6P7H3ai06vU1sGvdpBwDmE', 'country/area': 'US', 'count': 1}, 
         'Van Morrison': 
@@ -32,44 +33,68 @@ Dic = {'Steely Dan':
             {'id': '4J69yWrKwWJgjv3DKTZcGo', 'country/area': 'US', 'count': 1}, 
         'Janis Joplin': 
             {'id': '4NgfOZCL9Ml67xzM0xzIvC', 'country/area': 'US', 'count': 1}, 
-        'Red Hot Chili Peppers': {'id': '0L8ExT028jH3ddEcZwqJJ5', 'country/area': 'US', 'count': 1}, 'Steve Miller Band': {'id': '6QtGlUje9TIkLrgPZrESuk', 'country/area': 'US', 'count': 1}, 'The Doors': {'id': '22WZ7M8sxp5THdruNY3gXt', 'country/area': 'US', 'count': 1}, 'R.E.M.': {'id': '4KWTAlx2RvbpseOGMEmROg', 'country/area': 'US', 'count': 1}, 'The Beach Boys': {'id': '3oDbviiivRWhXwIE8hxkVV', 'country/area': 'US', 'count': 2}, 'Dire Straits': {'id': '0WwSkZ7LtFUFjGjMZBMt6T', 'country/area': 'GB', 'count': 2}, 'Joni Mitchell': {'id': '5hW4L92KnC6dX9t7tYM4Ve', 'country/area': 'CA', 'count': 2}, 'Cass Elliot': {'id': '5jX7X3kRkfJTRqAdT7RcHk', 'country/area': 'US', 'count': 1}, 'Green Day': {'id': '7oPftvlwr6VrsViSDV7fJY', 'country/area': 'US', 'count': 2}, 'Juice Newton': {'id': '4L1z1IcfK7lbqx8izGHaw5', 'country/area': 'US', 'count': 1}, 'Elvis Costello': {'id': '2BGRfQgtzikz1pzAD0kaEn', 'country/area': 'GB', 'count': 1}, 'Jim Croce': {'id': '1R6Hx1tJ2VOUyodEpC12xM', 'country/area': 'US', 'count': 1}, 'Kendrick Lamar': {'id': '2YZyLoL8N0Wb9xBt1NhZWg', 'country/area': 'US', 'count': 1}}
+        'Red Hot Chili Peppers': 
+            {'id': '0L8ExT028jH3ddEcZwqJJ5', 'country/area': 'US', 'count': 1}, 
+        'Steve Miller Band': 
+            {'id': '6QtGlUje9TIkLrgPZrESuk', 'country/area': 'US', 'count': 1}, 
+        'The Doors': 
+            {'id': '22WZ7M8sxp5THdruNY3gXt', 'country/area': 'US', 'count': 1}, 
+        'R.E.M.': 
+            {'id': '4KWTAlx2RvbpseOGMEmROg', 'country/area': 'US', 'count': 1}, 
+        'The Beach Boys': 
+            {'id': '3oDbviiivRWhXwIE8hxkVV', 'country/area': 'US', 'count': 2}, 
+        'Dire Straits': 
+            {'id': '0WwSkZ7LtFUFjGjMZBMt6T', 'country/area': 'GB', 'count': 2}
+    }
  
 existingCountries = []
+recommendSingers = {}
 for artist in Dic.keys():
     tempPlace = Dic[artist]["country/area"]
     if tempPlace not in existingCountries:
         existingCountries.append(tempPlace)  
 
 print(existingCountries)
-print("\n----------\n")
+print("\n----------")
 
+#for each artist
 for artist in Dic.keys():
+    # check if we need to break
+    if(len(recommendSingers) > 3):
+        break
+
+    # Related artists from Spotify
     related_artists = sp.artist_related_artists(Dic[artist]["id"])
-    relatedList = []
+    ## for each
     for related_artist in related_artists["artists"]:
-        relatedList.append(related_artist["name"])
+        #print(related_artist)
 
-        #print(relatedList)
-    #print(related_artists["artists"][0]["name"])
-    #queryBranch = musicbrainzngs.search_artists(query=related_artists["artists"][0]["name"])
-
-        queryBranch = musicbrainzngs.search_artists(query=related_artist)
-    
+        related_info = musicbrainzngs.search_artists(query=related_artist['name'])
         place = ''
-        if "country" in queryBranch["artist-list"][0].keys():
-            place = queryBranch["artist-list"][0]["country"]
-        elif "area" in queryBranch["artist-list"][0].keys():
-            place = queryBranch["artist-list"][0]["area"]["name"]
+        
+        if "country" in related_info["artist-list"][0].keys():
+            place = related_info["artist-list"][0]["country"]
+        elif "area" in related_info["artist-list"][0].keys():
+            place = related_info["artist-list"][0]["area"]["name"]
         else:
             #pass for now
-            continue
-        #print(place + "  length: " + str(len(place)))
+            break
+        
         if place != '' and place not in existingCountries:
-            if len(place) < 4:
-                print("hh\n" + place)
-                print(queryBranch["artist-list"])
-                quit()
+            if len(place) < 4 and place != "CA":
+                if related_artist["name"] not in recommendSingers:
+                    print("New country: " + place + "\ninfo: ")
+                    print(related_artist["name"])
+                    recommendSingers[related_artist["name"]] = place
+        if(len(recommendSingers) > 3):
+            break
+    
+        
 
-    #check if country is in existing list
+                
+
+                
+
+    # #check if country is in existing list
     
 
