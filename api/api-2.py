@@ -26,7 +26,7 @@ artistCountries = {}
 Dict = {}
 for song in tracks["items"]:
     artists = song["track"]["artists"]
-
+    print(artists)
     for artist in artists:
         if artist["name"] not in artistList:
             # create artist and start counting as 1

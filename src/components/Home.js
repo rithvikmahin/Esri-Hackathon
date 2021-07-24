@@ -21,7 +21,7 @@ export function Home() {
             data: query
         }
 
-        axios.get('http://0.0.0.0:5000/api', myParams).then((response) => {
+        axios.post('http://127.0.0.1:5000/api', myParams).then((response) => {
             console.log(response);
         }).catch((error) => {
             console.log(error);
