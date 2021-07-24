@@ -8,22 +8,23 @@ secret = '34e6b849c10d4edbb476adddf990171e'
 client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-# public spotify playlist link 
+# public spotify playlist links 
 # from a chinese friend: "https://open.spotify.com/playlist/37i9dQZF1DWSBcxmKiZ0B8"
-# from charlie
+#                           "https://open.spotify.com/playlist/1q21zSTS47o2GZKz7rktOb"
+# from charlie "https://open.spotify.com/playlist/6Oo1h6XVJSh3TKATxgUkF7?si=ecf2f522e75844e9"
+
 url = "https://open.spotify.com/playlist/6Oo1h6XVJSh3TKATxgUkF7?si=ecf2f522e75844e9"
 
-tracks = sp.playlist_tracks(url, limit=30)
+tracks = sp.playlist_tracks(url, limit=50)
 musicbrainzngs.set_useragent("test","1")
-# print(musicbrainzngs.search_artists(query="van morrison")["artist-list"][0]["area"]["name"])
-# quit()
+
 # a dictionary {"name of artist" : "times appear in the playlist"}
 artistList = {}
 artistIDs = {}
 artistCountries = {}
+
+Dict = {}
 for song in tracks["items"]:
-    
-    #artists = tracks["items"][0]["track"]["artists"]
     artists = song["track"]["artists"]
 
     for artist in artists:
@@ -35,28 +36,31 @@ for song in tracks["items"]:
             # get the country info of artist
             queryBranch = musicbrainzngs.search_artists(query=artist["name"])
             if "country" in queryBranch["artist-list"][0].keys():
-                artistCountries[artist["name"]] = queryBranch["artist-list"][0]["country"]
+                # artistCountries[artist["name"]] = queryBranch["artist-list"][0]["country"]
+
+                newArtist = {"id":artist["id"], "country/area":queryBranch["artist-list"][0]["country"],"count":1}
+
             elif "area" in queryBranch["artist-list"][0].keys():
-                artistCountries[artist["name"]] = queryBranch["artist-list"][0]["area"]["name"]
+                # artistCountries[artist["name"]] = queryBranch["artist-list"][0]["area"]["name"]
+
+                newArtist = {"id":artist["id"], "country/area":queryBranch["artist-list"][0]["area"]["name"],"count":1}
+
             else:
-                print("\n\n---\n" + queryBranch["artist-list"][0])
-                print(queryBranch["artist-list"][0])
+                #pass for now
+                continue
+
+            Dict[artist["name"]] = newArtist
 
         else:
-            artistList[artist["name"]] += 1    
-print(artistCountries)
-quit()
+            # artistList[artist["name"]] += 1
+            Dict[artist["name"]]["count"] +=1
 
-print(artistList)
+print(Dict)
 
-print("\n---------------------------\n")
+# print(artistCountries)
+# quit()
 
-print(artistIDs)
 
-print("\nNumber of unique artists: "  + str(len(artistList)))
-
-print("\n---------------------------\n")
-print(artistCountries)
 # artistsCountry = artistIDs
 # for eachArtist in artists:
 #     print(eachArtist)
@@ -75,28 +79,28 @@ quit()
 
 
 # get the name and country/area of artist(s) from your playlist
-musicbrainzngs.set_useragent("test", "1")
-query = musicbrainzngs.search_artists(query=artist)
-country = query["artist-list"][0]["country"]
-print("Artists in your playlist: \n\t\t" + artist,",",country)
+# musicbrainzngs.set_useragent("test", "1")
+# query = musicbrainzngs.search_artists(query=artist)
+# country = query["artist-list"][0]["country"]
+# print("Artists in your playlist: \n\t\t" + artist,",",country)
 
 
-#get related artists' name
-x = 1
-print("Top 3 Related artists")
-for i in related_artists["artists"]:
-    if x < 3:
-        print("Related Artists " + str(x) +": \t"+ i["name"])
-        # not sure what would happen if there are less than 3 geners
-        print("\t" + "Top 3 genres: " + str(i["genres"][0:3]))   
-        x += 1
-        musicbrainzngs.set_useragent("test","1")
-        queryBranch = musicbrainzngs.search_artists(query=i["name"])
-        print("\tCountry: " + queryBranch["artist-list"][0]["country"])
-        #print all information
-        #print(i)
-    else:
-        break
+# #get related artists' name
+# x = 1
+# print("Top 3 Related artists")
+# for i in related_artists["artists"]:
+#     if x < 3:
+#         print("Related Artists " + str(x) +": \t"+ i["name"])
+#         # not sure what would happen if there are less than 3 geners
+#         print("\t" + "Top 3 genres: " + str(i["genres"][0:3]))   
+#         x += 1
+#         musicbrainzngs.set_useragent("test","1")
+#         queryBranch = musicbrainzngs.search_artists(query=i["name"])
+#         print("\tCountry: " + queryBranch["artist-list"][0]["country"])
+#         #print all information
+#         #print(i)
+#     else:
+#         break
 
 
 # symbology later on
