@@ -27,9 +27,9 @@ def get_query_from_react():
     musicbrainzngs.set_useragent("test","1")
 
     # a dictionary {"name of artist" : "times appear in the playlist"}
-    artistList = {}
-    artistIDs = {}
-    artistCountries = {}
+    # artistList = {}
+    # artistIDs = {}
+    # artistCountries = {}
 
     Dict = {}
 
@@ -39,8 +39,8 @@ def get_query_from_react():
         for artist in artists:
             if artist["name"] not in artistList:
                 # create artist and start counting as 1
-                artistList[artist["name"]] = 1
-                artistIDs[artist["name"]] = artist["id"]
+                # artistList[artist["name"]] = 1
+                # artistIDs[artist["name"]] = artist["id"]
                 # get the country info of artist
                 queryBranch = musicbrainzngs.search_artists(query=artist["name"])
                 if "country" in queryBranch["artist-list"][0].keys():
@@ -67,16 +67,52 @@ def get_query_from_react():
     print("Here2")
     print("Dict, ", Dict)
 
-    # print(artistCountries)
-    # quit()
+    existingCountries = []
+    recommendSingers = {}
 
+    # parse dict to get country information
+    for artist in Dict.keys():
+        tempPlace = Dic[artist]["country/area"]
+        if tempPlace not in existingCountries:
+            existingCountries.append(tempPlace)  
 
-    # artistsCountry = artistIDs
-    # for eachArtist in artists:
-    #     print(eachArtist)
+    print(existingCountries)
+    print("\n----------")
+
+    #for each artist
+    for artist in Dic.keys():
+        # check if we need to break
+        if(len(recommendSingers) > 3):
+            break
+
+    # Related artists from Spotify
+        related_artists = sp.artist_related_artists(Dic[artist]["id"])
+        ## for each
+        for related_artist in related_artists["artists"]:
+            #print(related_artist)
+
+            related_info = musicbrainzngs.search_artists(query=related_artist['name'])
+            place = ''
+        
+            if "country" in related_info["artist-list"][0].keys():
+                place = related_info["artist-list"][0]["country"]
+            elif "area" in related_info["artist-list"][0].keys():
+                place = related_info["artist-list"][0]["area"]["name"]
+            else:
+                #pass for now
+                break
+        
+            if place != '' and place not in existingCountries:
+                if len(place) < 4 and place != "CA":
+                    if related_artist["name"] not in recommendSingers:
+                        print("New country: " + place + "\ninfo: ")
+                        print(related_artist["name"])
+                        recommendSingers[related_artist["name"]] = place
+            if(len(recommendSingers) > 3):
+                break   
 
     quit()
-    return Dict
+    return recommendSingers
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000)
