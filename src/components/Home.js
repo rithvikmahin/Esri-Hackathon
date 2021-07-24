@@ -23,6 +23,7 @@ export function Home() {
 
         axios.post('http://127.0.0.1:5000/api', myParams).then((response) => {
             console.log(response);
+
         }).catch((error) => {
             console.log(error);
         });
@@ -42,8 +43,11 @@ export function Home() {
             <div className="rowA">
                 <Search input={input} onChange={updateInput}></Search>
             </div>
+            <Button></Button>
         </div>
     );  
 }
 
-
+function Button() {
+  return <a href="map.html">Redirect to Html page</a>
+}
