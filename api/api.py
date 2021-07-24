@@ -18,15 +18,19 @@ artist_id = tracks["items"][0]["track"]["artists"][0]["id"]
 related_artists = sp.artist_related_artists(artist_id)
 
 x = 1
+print("Top 3 Related artists")
 for i in related_artists["artists"]:
     if x < 3:
-        print(x)
-        print(i)
+        print("Related Artists " + str(x) +": \t"+ i["name"])
+        # not sure what would happen if there are less than 3 geners
+        print("\t" + "Top 3 genres: " + str(i["genres"][0:3]))   
         x += 1
+    else:
+        break
 
 
-
-musicbrainzngs.set_useragent("test", "1")
-query = musicbrainzngs.search_artists(query="Taylor Swift")
-country = query["artist-list"][0]["country"]
-print(artist,",",country)
+if 0:
+    musicbrainzngs.set_useragent("test", "1")
+    query = musicbrainzngs.search_artists(query="Taylor Swift")
+    country = query["artist-list"][0]["country"]
+    print(artist,",",country)
