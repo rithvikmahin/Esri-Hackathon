@@ -126,7 +126,8 @@ def get_query_from_react():
     #         {'id': '0WwSkZ7LtFUFjGjMZBMt6T', 'country/area': 'GB', 'count': 2}
     #     }, 
     # 'RecommendArtists': 
-    #     { 'Little River Band': 'AU', 
+    #     { 
+    #       'Little River Band': 'AU', 
     #       'The Boomtown Rats': 'IE', 
     #       'Crowded House': 'AU', 
     #       'INXS': 'AU'
