@@ -12,6 +12,7 @@
         }
       </style>
       <link rel="stylesheet" href="https://js.arcgis.com/4.20/esri/themes/light/main.css">
+      <link rel="stylesheet" href="./map.css">
       <script src="https://js.arcgis.com/4.20/"></script>
       <script src="map.js"></script>
     </head>
@@ -21,4 +22,17 @@
       <div id="artists">
       </div>
     </body>
+    <script>
+      const container = document.getElementById("artists");
+      for (key of Object.keys(recData)) {
+          console.log(key);
+          artistName = key;
+          artistLocation = recData[key]["Place"];
+          songLink = recData[key]["URL"];
+          let para = document.createElement('p');
+          para.innerHTML = `<a href=${songLink} style="text-decoration: none">${artistName} - ${artistLocation}</a>`
+          para.className = "para";
+          container.parentNode.insertBefore(para, container);
+      }
+    </script>
 </html>

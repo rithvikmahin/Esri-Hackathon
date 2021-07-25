@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'Avenir Next LT Pro';
+    src: url(./AvenirNextLTPro-Regular.ttf) format('truetype');
+}
+
+.para {
+    color: #ffffff;
+    font-family: 'Avenir Next LT Pro';
+    text-align: center;
+}
+
+a {
+    color: #ffffff;
+}
+
+a:hover { color: #1DB954 ; text-decoration: none; }

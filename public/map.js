@@ -66,7 +66,6 @@ require([
     }
 
     addCountries(recCountries, recColorTrans, recColor);
-    //addArtists();
 });
 
 // init basic map
@@ -162,7 +161,7 @@ function addArtistData() {
             artists.push(key);
     }
     for (key in recData) {
-        if (recData[key] === countryCode)
+        if (recData[key]["Place"] === countryCode)
             artists.push(key);
     }
 
@@ -190,3 +189,4 @@ function addArtistData() {
 //         container.insertAdjacentElement("beforebegin", para);
 //     }
 // }
+// addArtists();
