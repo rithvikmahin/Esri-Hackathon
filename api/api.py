@@ -102,8 +102,21 @@ def get_query_from_react():
     
     ### Get Url for each artist in recommendSingers
     if len(recommendSingers) > 1: # not empty
-        for recmdArti in recommendSingers:
-            print(recmdArti)
+        for recmdArti in recommendSingers.keys():
+            #print(recmdArti)
+            searchResult = sp.search(recmdArti)
+            if "tracks" in searchResult:
+                if len(searchResult["tracks"]["items"]) >= 1:
+                    if "artists" in searchResult["tracks"]["items"][0]:
+                        #print(searchResult["tracks"]["items"][0]["artists"][0]["external_urls"]["spotify"])
+                        recommendSingers[recmdArti]["URL"] = searchResult["tracks"]["items"][0]["artists"][0]["external_urls"]["spotify"]
+                    else:
+                        print("No artist in the result for " + recmdArti)
+                else:
+                    print("No result error for " + recmdArti)
+            else:
+                print("Search result for " + recmdArti + "is problematic!")
+
     ## end getting URL
 
     recommend = {}
@@ -130,11 +143,9 @@ def get_query_from_react():
     #     }, 
     # 'RecommendArtists': 
     #     { 
-    #       'Little River Band': 'AU', 
-                                    # {country: "xx", link: "xxx.com"}
-    #       'The Boomtown Rats': 'IE', 
-    #       'Crowded House': 'AU', 
-    #       'INXS': 'AU'
+    #       'Little River Band': {"country": "AU", "link": "https://open.spotify.com/artist/6clbbhnIqpHnqxwtOWcilg"},
+    #       'The Boomtown Rats': {"country": 'IE', "link":https://open.spotify.com/artist/40oYPr305MsT2lsiXr9fX9}, 
+    #       'Crowded House': 'AU': {"country": "AU", "link": "https://open.spotify.com/artist/7ohlPA8dRBtCf92zaZCaaB"}
     #     }
     # }
     ######################
