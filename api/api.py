@@ -101,7 +101,7 @@ def get_query_from_react():
                 break   
     
     ### Get Url for each artist in recommendSingers
-    if len(recommendSingers) > 1: # not empty
+    if len(recommendSingers) >= 1: # not empty
         for recmdArti in recommendSingers.keys():
             #print(recmdArti)
             searchResult = sp.search(recmdArti)
