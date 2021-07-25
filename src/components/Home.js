@@ -19,17 +19,13 @@ export function Home() {
     const handleQuery = (query) => {
         let myParams = {
             headers: {
+                'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             data: query
         }
-
-        const api = axios.create({
-            baseURL: "http://127.0.0.1:5000/api",
-            timeout: 10 * 60 * 1000
-        });
         
-        api.post('http://127.0.0.1:5000/api', myParams).then((response) => {
+        axios.post('http://127.0.0.1:5000/api', myParams).then((response) => {
             console.log("Response, ", response.data);
             sessionStorage.setItem("data", JSON.stringify(response));
         }).catch((error) => {
