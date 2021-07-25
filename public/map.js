@@ -11,8 +11,22 @@ let map;
 let view;
 let graphicsLayer;
 
-// dummy dataset - just a placeholder rn
-let dataset = { "Taylor Swift": "US" };
+// datasets
+const dataset = JSON.parse(sessionStorage.getItem("data"))["data"];
+const playlistData = dataset["ArtistsInPlaylist"];
+const recData = dataset["RecommendArtists"]
+
+// custom actions
+let loadArtistsAction = {
+    title: "Load Artists",
+    id: "load-artists",
+};
+
+// theme colors
+const playlistColor = "rgb(29, 185, 84)";
+const playlistColorTrans = "rgba(29, 185, 84, 0.6)";
+const recColor = "rgb(220, 20, 140)";
+const recColorTrans = "rgba(220, 20, 140, 0.6)";
 
 require([
     // modules
@@ -32,10 +46,26 @@ require([
     esriGraphicsLayer = GraphicsLayer;
     esriFeatureLayer = FeatureLayer;
 
+    localStorage.clear();
+
     // create map
     initMap();
 
-    addCountries();
+    // add playlist data
+    const playlistCountries = [];
+    for (key in playlistData) {
+        playlistCountries.push(playlistData[key]["country/area"]);
+    }
+
+    addCountries(playlistCountries, playlistColorTrans, playlistColor);
+
+    // add recommendations
+    const recCountries = [];
+    for (key in recData) {
+        recCountries.push(recData[key]);
+    }
+
+    addCountries(recCountries, recColorTrans, recColor);
 });
 
 // init basic map
@@ -54,6 +84,13 @@ function initMap() {
         zoom: 3,
         container: "viewDiv"
     });
+
+    // Event handler that fires each time an action is clicked.
+    view.popup.on("trigger-action", function(event) {
+        if (event.action.id === "load-artists") {
+            addArtistData();
+        }
+    });
   
     // add graphics layer to display points
     graphicsLayer = new esriGraphicsLayer();
@@ -61,12 +98,10 @@ function initMap() {
 }
 
 // shade in a country on the map
-function addCountries() {
+function addCountries(countries, color, outline) {
     const countryStyles = [];
-    const popups = [];
-    for (key in dataset) {
-        countryStyles.push(createStyle(dataset[key], "#1db954"))
-        popups.push(generatePopup(dataset[key], key));
+    for (country of countries) {
+        countryStyles.push(createStyle(country, color, outline))
     }
 
     // renderer; filters data to return by ISO code
@@ -76,26 +111,22 @@ function addCountries() {
         uniqueValueInfos: countryStyles
     };
 
+    const popup = generatePopup();
+
     // feature layer containing country data (polygons)
     const countriesLayer = new esriFeatureLayer({
         url: "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/World_Countries/FeatureServer/0",
         renderer: countriesRenderer,
         opacity: 0.8,
-        popupTemplate: popups[0]
+        outFields: ["COUNTRY", "ISO_CC"],
+        popupTemplate: popup
     });
 
     map.add(countriesLayer);
 }
 
-function generatePopup(country, artist) {
-    return {
-        "title": country,
-        "content": `<b>Artists: </b> ${artist}<br>`
-    }
-}
-
 // function that determines visual style
-function createStyle(value, color) {
+function createStyle(value, color, outline) {
     return {
         "value": value,
         "symbol": {
@@ -103,10 +134,47 @@ function createStyle(value, color) {
             "type": "simple-fill",
             "style": "solid",
             "outline": {
-                color: color,
+                color: outline,
                 width: "1px"
             }
         },
         "label": value
     };
 }
+
+// create the popup template
+function generatePopup() {
+    return {
+        "title": "{COUNTRY}",
+        "content": "Click Button to Load {ISO_CC} Artists...",
+        actions: [ loadArtistsAction ]
+    }
+}
+
+// inject the artist data into the popup
+function addArtistData() {
+    const artists = [];
+    const countryCode = view.popup.selectedFeature.attributes["ISO_CC"];
+
+    for (key in playlistData) {
+        if (playlistData[key]["country/area"] === countryCode)
+            artists.push(key);
+    }
+    for (key in recData) {
+        if (recData[key] === countryCode)
+            artists.push(key);
+    }
+
+    view.popup.content = "Artists: ";
+
+    for (let i = 0; i < artists.length; i++) {
+        view.popup.content += artists[i];
+        if (i !== artists.length - 1)
+            view.popup.content += ", ";
+    }
+}
+
+// make side panel
+
+// style labels
+// points for cities
