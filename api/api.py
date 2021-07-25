@@ -54,7 +54,6 @@ def get_query_from_react():
                 Dict[artist["name"]]["count"] +=1
                 
     # all artists' info is stored in Dict
-    print("Here2")
     #print("Dict, ", Dict)
 
     existingCountries = []
@@ -139,7 +138,8 @@ def get_query_from_react():
     #     }
     # }
     ######################
-    return result
+    print("Jsonify Result", result)
+    return jsonify(result)
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000)

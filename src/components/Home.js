@@ -19,19 +19,16 @@ export function Home() {
     const handleQuery = (query) => {
         let myParams = {
             headers: {
+                'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             data: query
         }
-
-        const api = axios.create({
-            baseURL: "http://127.0.0.1:5000/api",
-            timeout: 10 * 60 * 1000
-        });
         
-        api.post('http://127.0.0.1:5000/api', myParams).then((response) => {
-            console.log("Response, ", response.data);
+        axios.post('http://127.0.0.1:5000/api', myParams).then((response) => {
             sessionStorage.setItem("data", JSON.stringify(response));
+            const redirectButton = document.getElementById("redirectButton");
+            redirectButton.click();
         }).catch((error) => {
             console.log("Error, ", error);
         });
@@ -58,5 +55,5 @@ export function Home() {
 
 
 function Button() {
-  return <button><a href="map.html">Redirect to Html page</a></button>
+  return <a href="map.html"><button id="redirectButton" style={{ display: "None" }}></button></a>
 }
