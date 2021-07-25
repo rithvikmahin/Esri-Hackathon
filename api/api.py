@@ -26,9 +26,7 @@ def get_query_from_react():
     tracks = sp.playlist_tracks(url, limit=50)
     musicbrainzngs.set_useragent("userAgent","1.0")
 
-    # a dictionary {"name of artist" : "times appear in the playlist"}
     artistList = {}
-    # artistCountries = {}
 
     Dict = {}
 
@@ -99,10 +97,16 @@ def get_query_from_react():
                     if related_artist["name"] not in recommendSingers:
                         print("New country: " + place + "\ninfo: ")
                         print(related_artist["name"])
-                        recommendSingers[related_artist["name"]] = place
+                        recommendSingers[related_artist["name"]] = {"Place": place}
             if(len(recommendSingers) > 3):
                 break   
     
+    ### Get Url for each artist in recommendSingers
+    if len(recommendSingers) > 1: # not empty
+        for recmdArti in recommendSingers:
+            print(recmdArti)
+    ## end getting URL
+
     recommend = {}
     recommend["RecommendArtists"] = recommendSingers
 
@@ -128,6 +132,7 @@ def get_query_from_react():
     # 'RecommendArtists': 
     #     { 
     #       'Little River Band': 'AU', 
+                                    # {country: "xx", link: "xxx.com"}
     #       'The Boomtown Rats': 'IE', 
     #       'Crowded House': 'AU', 
     #       'INXS': 'AU'
