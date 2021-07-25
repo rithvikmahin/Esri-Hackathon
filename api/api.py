@@ -94,8 +94,7 @@ def get_query_from_react():
             if place != '' and place not in existingCountries:
                 if len(place) < 4:
                     if related_artist["name"] not in recommendSingers:
-                        print("New country: " + place + "\ninfo: ")
-                        print(related_artist["name"])
+                        print("\nArtist: " + related_artist["name"] + "  from: " + place )
                         recommendSingers[related_artist["name"]] = {"Place": place}
             if(len(recommendSingers) > 3):
                 break   
