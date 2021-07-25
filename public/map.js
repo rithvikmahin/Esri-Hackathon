@@ -14,7 +14,7 @@ let graphicsLayer;
 // datasets
 const dataset = JSON.parse(sessionStorage.getItem("data"))["data"];
 const playlistData = dataset["ArtistsInPlaylist"];
-const recData = dataset["RecommendArtists"]
+const recData = dataset["RecommendArtists"];
 
 // custom actions
 let loadArtistsAction = {
@@ -62,10 +62,11 @@ require([
     // add recommendations
     const recCountries = [];
     for (key in recData) {
-        recCountries.push(recData[key]);
+        recCountries.push(recData[key]["Place"]);
     }
 
     addCountries(recCountries, recColorTrans, recColor);
+    //addArtists();
 });
 
 // init basic map
@@ -178,3 +179,14 @@ function addArtistData() {
 
 // style labels
 // points for cities
+
+// function addArtists() {
+//     const container = document.getElementById("artists");
+//     for (key of Object.keys(recData)) {
+//         console.log(key);
+//         artistName = key;
+//         songLink = recData[key]["URL"];
+//         let para = `<p>${artistName} - ${songLink}</p>`
+//         container.insertAdjacentElement("beforebegin", para);
+//     }
+// }
