@@ -5,8 +5,8 @@ import spotipy
 import musicbrainzngs
 from spotipy.oauth2 import SpotifyClientCredentials
 
-cid = '4335e7dec6f24bc5b85b1c015912cf5e' #our own ID
-secret = '34e6b849c10d4edbb476adddf990171e'
+cid = '' #our own ID
+secret = ''
 client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
